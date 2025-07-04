@@ -6,7 +6,7 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:07:23 by ktombola          #+#    #+#             */
-/*   Updated: 2025/05/12 13:40:13 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/04 17:50:56 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,8 @@
 
 typedef struct s_args
 {
-    int				id;
-    pthread_mutex_t	*print_mutex;
+	int				id;
+	pthread_mutex_t	*print_mutex;
 }	t_args;
 
-# endif
+#endif
