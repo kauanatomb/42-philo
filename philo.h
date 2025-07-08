@@ -23,10 +23,16 @@
 # define SLEEP_TIME 1000
 # define THINK_TIME 1000
 
-typedef struct s_args
+typedef struct s_data
 {
-	int				id;
-	pthread_mutex_t	*print_mutex;
-}	t_args;
+	pthread_mutex_t	forks[N_PHILO];
+	pthread_mutex_t	print_mutex;
+}	t_data;
+
+typedef struct s_philo
+{
+	int		id;
+	t_data	*data;
+}	t_philo;
 
 #endif
