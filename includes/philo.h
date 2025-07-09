@@ -17,6 +17,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/time.h>
 
 # define N_PHILO 5
 # define EAT_TIME 1000
@@ -27,12 +28,18 @@ typedef struct s_data
 {
 	pthread_mutex_t	forks[N_PHILO];
 	pthread_mutex_t	print_mutex;
+	long			start_time;
 }	t_data;
 
 typedef struct s_philo
 {
 	int		id;
 	t_data	*data;
+	long	last_meal_time;
 }	t_philo;
+
+void	*philosopher_routine(void *arg);
+void	print_action(t_philo *philo, const char *msg);
+long	get_time_ms(void);
 
 #endif
