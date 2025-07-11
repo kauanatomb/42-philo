@@ -12,104 +12,58 @@
 
 #include "philo.h"
 
-void	print_action(t_philo *philo, const char *msg)
+void	safe_usleep(long milliseconds)
 {
-	long	timestamp;
-
-	timestamp = get_time_ms() - philo->data->start_time;
-	pthread_mutex_lock(&philo->data->print_mutex);
-	printf("time: %ld philo: %d %s\n", timestamp, philo->id, msg);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+	long	start = get_time_ms();
+	while ((get_time_ms() - start) < milliseconds)
+		usleep(250);
 }
 
-void	release_forks(t_philo *philo, int f1, int f2)
+void	eat(t_philo *philo)
 {
-	pthread_mutex_unlock(&philo->data->forks[f1]);
-	pthread_mutex_unlock(&philo->data->forks[f2]);
+	pthread_mutex_lock(philo->r_fork);
+	print_action(philo, "has taken a fork");
+	if (philo->data->n_philo == 1)
+	{
+		safe_usleep(philo->data->time_to_die);
+		pthread_mutex_unlock(philo->r_fork);
+		return ;
+	}
+	pthread_mutex_lock(philo->l_fork);
+	print_action(philo, "has taken a fork");
+	philo->n_meals++;
+	pthread_mutex_lock(&philo->meal_mutex);
+	philo->last_meal_time = get_time_ms();
+	pthread_mutex_unlock(&philo->meal_mutex);
+	print_action(philo, "is eating");
+	safe_usleep(philo->data->time_to_eat);
+	pthread_mutex_unlock(philo->r_fork);
+	pthread_mutex_unlock(philo->l_fork);
+}
+
+void	think(t_philo *philo)
+{
+	print_action(philo, "is thinking");
+}
+
+void	dream(t_philo *philo)
+{
+	print_action(philo, "is sleeping");
+	safe_usleep(philo->data->time_to_sleep);
 }
 
 void	*philosopher_routine(void *arg)
 {
 	t_philo	*philo = (t_philo *)arg;
-	int		left = philo->id;
-	int		right = (philo->id + 1) % philo->data->n_philo;
 
-	int		first = left < right ? left : right;
-	int		second = left < right ? right : left;
+	if (philo->id % 2 == 0)
+		safe_usleep(10);
 
 	while (!is_simulation_stopped(philo->data))
 	{
-		print_action(philo, "is thinking");
-		usleep(THINK_TIME);
-
-		pthread_mutex_lock(&philo->data->forks[first]);
-		print_action(philo, "has taken a fork");
-		pthread_mutex_lock(&philo->data->forks[second]);
-		print_action(philo, "has taken a fork");
-
-		if (is_simulation_stopped(philo->data))
-		{
-			release_forks(philo, first, second);
-			pthread_exit(NULL);
-		}
-
-		philo->last_meal_time = get_time_ms();
-		print_action(philo, "is eating");
-		usleep(EAT_TIME);
-
-		release_forks(philo, first, second);
-		print_action(philo, "is sleeping");
-		usleep(SLEEP_TIME);
+		eat(philo);
+		dream(philo);
+		think(philo);
 	}
 	return (NULL);
-}
-
-long	get_time_ms(void)
-{
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return (tv.tv_sec * 1000L + tv.tv_usec / 1000L);
-}
-
-int	is_simulation_stopped(t_data *data)
-{
-	int	stop;
-
-	pthread_mutex_lock(&data->state_mutex);
-	stop = data->stop;
-	pthread_mutex_unlock(&data->state_mutex);
-	return (stop);
-}
-
-void	set_simulation_stop(t_data *data)
-{
-	pthread_mutex_lock(&data->state_mutex);
-	data->stop = 1;
-	pthread_mutex_unlock(&data->state_mutex);
-}
-
-void	*monitor_routine(void *arg)
-{
-	t_philo *philos = (t_philo *)arg;
-	t_data *data = philos[0].data;
-	int		i;
-
-	while (!is_simulation_stopped(data))
-	{
-		i = 0;
-		while (i < N_PHILO)
-		{
-			long now = get_time_ms();
-			if (now - philos[i].last_meal_time > data->time_to_die)
-			{
-				print_action(&philos[i], "died");
-				set_simulation_stop(data);
-				return NULL;
-			}
-			i++;
-		}
-		usleep(100); // Evita busy waiting (checa a cada 100µs)
-	}
-	return NULL;
 }
