@@ -18,11 +18,12 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <sys/time.h>
+# include <limits.h>
 
 typedef struct s_data
 {
 	int				n_philo;
-	long			time_to_die
+	long			time_to_die;
 	long			time_to_eat;
 	long			time_to_sleep;
 	int				must_eat_count;
