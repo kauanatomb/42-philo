@@ -33,8 +33,8 @@ void	eat(t_philo *philo)
 	}
 	pthread_mutex_lock(philo->l_fork);
 	print_action(philo, "has taken a fork");
-	philo->n_meals++;
 	pthread_mutex_lock(&philo->meal_mutex);
+	philo->n_meals++;
 	philo->last_meal_time = get_time_ms();
 	pthread_mutex_unlock(&philo->meal_mutex);
 	print_action(philo, "is eating");
