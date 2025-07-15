@@ -6,7 +6,7 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:21:12 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/09 18:02:55 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/15 15:05:42 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,9 @@
 
 void	safe_usleep(long milliseconds)
 {
-	long	start = get_time_ms();
+	long	start;
+
+	start = get_time_ms();
 	while ((get_time_ms() - start) < milliseconds)
 		usleep(250);
 }
@@ -54,11 +56,11 @@ void	dream(t_philo *philo)
 
 void	*philosopher_routine(void *arg)
 {
-	t_philo	*philo = (t_philo *)arg;
+	t_philo	*philo;
 
+	philo = (t_philo *)arg;
 	if (philo->id % 2 == 0)
 		safe_usleep(10);
-
 	while (!is_simulation_stopped(philo->data))
 	{
 		eat(philo);

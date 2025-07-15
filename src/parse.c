@@ -6,16 +6,16 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:21:12 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/04 18:02:55 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/15 15:00:51 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int exit_error(char *msg)
+int	exit_error(char *msg)
 {
-    fprintf(stderr, "%s\n", msg);
-    return (1);
+	fprintf(stderr, "%s\n", msg);
+	return (1);
 }
 
 int	ft_atoi_safe(const char *str, int *out)
@@ -24,14 +24,14 @@ int	ft_atoi_safe(const char *str, int *out)
 	int		sign;
 	int		i;
 
-    num = 0;
-    sign = 1;
-    i = 0;
+	num = 0;
+	sign = 1;
+	i = 0;
 	while (str[i] && ((str[i] >= 9 && str[i] <= 13) || str[i] == ' '))
 		i++;
 	if (str[i] == '+' || str[i] == '-')
 		if (str[i++] == '-')
-            sign = -1;
+			sign = -1;
 	if (!str[i])
 		return (1);
 	while (str[i])
@@ -39,7 +39,7 @@ int	ft_atoi_safe(const char *str, int *out)
 		if (str[i] < '0' || str[i] > '9')
 			return (1);
 		num = num * 10 + (str[i++] - '0');
-		if ((sign == 1 && num > INT_MAX) || (sign == -1 && -num < INT_MIN))
+		if ((sign == 1 && num > INT_MAX) || (sign == -1 && (-num) < INT_MIN))
 			return (1);
 	}
 	*out = (int)(num * sign);
@@ -57,7 +57,8 @@ int	parse_args(int argc, char **argv, t_data *data)
 		return (1);
 	if (argc == 6)
 	{
-		if (ft_atoi_safe(argv[5], &data->must_eat_count) || data->must_eat_count < 1)
+		if (ft_atoi_safe(argv[5], &data->must_eat_count)
+			|| data->must_eat_count < 1)
 			return (1);
 	}
 	else
