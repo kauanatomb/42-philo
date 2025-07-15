@@ -18,8 +18,7 @@ int	main(int argc, char *argv[])
 	t_philo			*philos;
 	pthread_t		*threads;
 	pthread_mutex_t	*forks;
-	pthread_t		monitor_thread;
-	int				i;
+	pthread_t		monitor;
 
 	if (parse_args(argc, argv, &data))
 		return (exit_error("Invalid arguments."));
@@ -30,38 +29,13 @@ int	main(int argc, char *argv[])
 	forks = malloc(sizeof(pthread_mutex_t) * data.n_philo);
 	philos = malloc(sizeof(t_philo) * data.n_philo);
 	threads = malloc(sizeof(pthread_t) * data.n_philo);
-	if (!forks || !philos || !threads)
-		return (exit_error("Malloc failed"));
-	i = -1;
-	while (++i < data.n_philo)
-		pthread_mutex_init(&forks[i], NULL);
-	i = -1;
-	while (++i < data.n_philo)
-	{
-		philos[i].id = i;
-		philos[i].data = &data;
-		philos[i].last_meal_time = data.start_time;
-		philos[i].n_meals = 0;
-		philos[i].r_fork = &forks[i];
-		philos[i].l_fork = &forks[(i + 1) % data.n_philo];
-		pthread_mutex_init(&philos[i].meal_mutex, NULL);
-		if (pthread_create(&threads[i], NULL, philosopher_routine, &philos[i]) != 0)
-			return (exit_error("Thread creation failed"));
-	}
-	if (pthread_create(&monitor_thread, NULL, monitor_routine, philos) != 0)
-		return (exit_error("Monitor thread creation failed"));
-	i = -1;
-	while (++i < data.n_philo)
-		pthread_join(threads[i], NULL);
-	pthread_join(monitor_thread, NULL);
-	i = -1;
-	while (++i < data.n_philo)
-		pthread_mutex_destroy(&forks[i]);
-	pthread_mutex_destroy(&data.state_mutex);
-	pthread_mutex_destroy(&data.print_mutex);
-	free(forks);
-	free(philos);
-	free(threads);
+	if (!forks || !philos || !threads
+		|| init_forks_mutex(&data, forks)
+		|| init_philos(&data, philos, forks)
+		|| start_threads(&data, philos, threads)
+		|| pthread_create(&monitor, NULL, monitor_routine, philos) != 0)
+		return (exit_error("Initialization failed"));
+	join_all(&data, threads, monitor);
+	cleanup(&data, philos, threads, forks);
 	return (0);
 }
-

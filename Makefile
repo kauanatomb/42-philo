@@ -12,7 +12,8 @@
 
 NAME    := philo
 
-SRCS     := src/main.c src/philo_utils.c src/philo_utils2.c src/parse.c
+SRCS     := src/main.c src/philo_utils.c src/philo_utils1.c src/philo_utils2.c \
+			src/monitor.c src/parse.c
 
 OBJS     := $(SRCS:.c=.o)
 
