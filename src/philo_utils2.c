@@ -19,7 +19,7 @@ void	print_action(t_philo *philo, const char *msg)
 	timestamp = get_time_ms() - (long)philo->data->start_time;
 	pthread_mutex_lock(&philo->data->print_mutex);
 	if (!is_simulation_stopped(philo->data))
-		printf("%ld %d %s\n", timestamp, philo->id, msg);
+		printf("%ld %d %s\n", timestamp, philo->id + 1, msg);
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
