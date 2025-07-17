@@ -66,7 +66,7 @@ int	parse_args(int argc, char **argv, t_data *data)
 	if (data->n_philo < 1 || data->time_to_die < 0
 		|| data->time_to_eat < 0 || data->time_to_sleep < 0)
 		return (1);
-	data.stop = 0;
-	data.start_time = get_time_ms();
+	data->stop = 0;
+	data->start_time = get_time_ms();
 	return (0);
 }

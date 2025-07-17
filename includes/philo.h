@@ -44,7 +44,7 @@ typedef struct s_philo
 	pthread_mutex_t	*l_fork;
 }	t_philo;
 
-int		init_all_mutexes(t_data *data, pthread_mutex_t *forks);
+int		init_all_mutexes(t_data *data, pthread_mutex_t *forks, int *forks_initialized);
 int		init_philos(t_data *data, t_philo *philos, pthread_mutex_t *forks);
 int		start_threads(t_data *data, t_philo *philos, pthread_t *threads);
 void	cleanup(t_data *data, t_philo *philos,
@@ -60,5 +60,7 @@ void	*monitor_routine(void *arg);
 int		is_simulation_stopped(t_data *data);
 void	set_simulation_stop(t_data *data);
 void	safe_usleep(long milliseconds);
+void	fail_mutex(t_data *data, pthread_mutex_t *forks, int forks_initialized);
+void	fail_aloc(pthread_mutex_t *forks, t_philo *philos, pthread_t *threads);
 
 #endif

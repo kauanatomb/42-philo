@@ -58,3 +58,17 @@ void	fail_aloc(pthread_mutex_t *forks, t_philo *philos, pthread_t *threads)
 	if (threads)
 		free(threads);
 }
+
+void	fail_mutex(t_data *data, pthread_mutex_t *forks, int forks_initialized)
+{
+	int	i;
+
+	if (forks && forks_initialized > 0)
+	{
+		i = -1;
+		while (++i < forks_initialized)
+			pthread_mutex_destroy(&forks[i]);
+	}
+	pthread_mutex_destroy(&data->state_mutex);
+	pthread_mutex_destroy(&data->print_mutex);
+}
