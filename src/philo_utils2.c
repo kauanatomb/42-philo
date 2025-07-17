@@ -48,3 +48,13 @@ void	set_simulation_stop(t_data *data)
 	data->stop = 1;
 	pthread_mutex_unlock(&data->state_mutex);
 }
+
+void	fail_aloc(pthread_mutex_t *forks, t_philo *philos, pthread_t *threads)
+{
+	if (forks)
+		free(forks);
+	if (philos)
+		free(philos);
+	if (threads)
+		free(threads);
+}

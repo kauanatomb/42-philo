@@ -44,7 +44,7 @@ typedef struct s_philo
 	pthread_mutex_t	*l_fork;
 }	t_philo;
 
-int		init_forks_mutex(t_data *data, pthread_mutex_t *forks);
+int		init_all_mutexes(t_data *data, pthread_mutex_t *forks);
 int		init_philos(t_data *data, t_philo *philos, pthread_mutex_t *forks);
 int		start_threads(t_data *data, t_philo *philos, pthread_t *threads);
 void	cleanup(t_data *data, t_philo *philos,
