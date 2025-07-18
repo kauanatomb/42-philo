@@ -35,6 +35,7 @@ int	init_philos(t_data *data, t_philo *philos, pthread_mutex_t *forks)
 	int	i;
 
 	i = 0;
+	data->start_time = get_time_ms();
 	while (i < data->n_philo)
 	{
 		philos[i].id = i;
@@ -47,7 +48,6 @@ int	init_philos(t_data *data, t_philo *philos, pthread_mutex_t *forks)
 			return (1);
 		i++;
 	}
-	data->start_time = get_time_ms();
 	return (0);
 }
 
