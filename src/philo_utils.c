@@ -47,6 +47,7 @@ int	init_philos(t_data *data, t_philo *philos, pthread_mutex_t *forks)
 			return (1);
 		i++;
 	}
+	data->start_time = get_time_ms();
 	return (0);
 }
 
