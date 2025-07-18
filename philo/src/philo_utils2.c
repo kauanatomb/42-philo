@@ -17,10 +17,12 @@ void	print_action(t_philo *philo, const char *msg)
 	long	timestamp;
 
 	timestamp = get_time_ms() - (long)philo->data->start_time;
-	pthread_mutex_lock(&philo->data->print_mutex);
 	if (!is_simulation_stopped(philo->data))
+	{
+		pthread_mutex_lock(&philo->data->print_mutex);
 		printf("%ld %d %s\n", timestamp, philo->id + 1, msg);
-	pthread_mutex_unlock(&philo->data->print_mutex);
+		pthread_mutex_unlock(&philo->data->print_mutex);
+	}
 }
 
 long	get_time_ms(void)
