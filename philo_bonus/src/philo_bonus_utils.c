@@ -29,28 +29,52 @@ int	init_semaphores(t_data *data)
 	return (0);
 }
 
-static void	init_philos(t_data *data, t_philo *philos)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->n_philo)
-	{
-		philos[i].id = i;
-		philos[i].data = data;
-		philos[i].last_meal_time = data->start_time;
-		philos[i].n_meals = 0;
-		i++;
-	}
-}
-
-int	init_data_and_philos(t_data *data, t_philo **philos)
+int	init_allocs(t_data *data, t_philo **philos)
 {
 	*philos = malloc(sizeof(t_philo) * data->n_philo);
 	data->pids = malloc(sizeof(pid_t) * data->n_philo);
 	if (!*philos || !data->pids)
 		return (1);
-	init_philos(data, *philos);
 	data->start_time = get_time_ms();
 	return (0);
+}
+
+int	start_processes(t_data *data)
+{
+	int	i;
+	pid_t	pid;
+
+	i = 0;
+	while (i < data->n_philo)
+	{
+		pid = fork();
+		if (pid < 0)
+			return (1);
+		else if (pid == 0)
+		{
+			philosopher_routine(data, i);
+			exit(0);
+		}
+		data->pids[i] = pid;
+		i++;
+	}
+	return (0);
+}
+
+long	get_time_ms(void)
+{
+	struct timeval	tv;
+
+	if (gettimeofday(&tv, NULL) == -1)
+		exit_error("gettimeofday() error");
+	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
+}
+
+void	safe_usleep(long milliseconds)
+{
+	long	start;
+
+	start = get_time_ms();
+	while ((get_time_ms() - start) < milliseconds)
+		usleep(250);
 }

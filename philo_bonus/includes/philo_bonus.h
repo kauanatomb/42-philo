@@ -41,7 +41,7 @@ typedef struct s_philo {
 } t_philo;
 
 int		init_semaphores(t_data *data);
-int	    init_data_and_philos(t_data *data, t_philo **philos);
+int	    init_allocs(t_data *data, t_philo **philos);
 void	cleanup_semaphores(t_data *data);
 void	cleanup_resources(t_data *data, t_philo *philos);
 

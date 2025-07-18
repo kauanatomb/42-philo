@@ -24,7 +24,7 @@ int	main(int argc, char *argv[])
 		cleanup_semaphores(&data);
 		return (exit_error("Failed to init semaphores"));
 	}
-    if (init_data_and_philos(&data, &philos))
+    if (init_allocs(&data, &philos))
 	{
 		cleanup_resources(&data, philos);
 		return (exit_error("Malloc failed"));
