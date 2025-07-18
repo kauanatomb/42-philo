@@ -12,12 +12,6 @@
 
 #include "philo.h"
 
-int	exit_error(char *msg)
-{
-	fprintf(stderr, "%s\n", msg);
-	return (1);
-}
-
 int	ft_atoi_safe(const char *str, int *out)
 {
 	long	num;
