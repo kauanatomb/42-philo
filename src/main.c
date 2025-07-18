@@ -19,7 +19,6 @@ int	main(int argc, char *argv[])
 	pthread_t		*threads;
 	pthread_mutex_t	*forks;
 	pthread_t		monitor;
-	int				forks_initialized;
 
 	if (parse_args(argc, argv, &data))
 		return (exit_error("Invalid arguments."));
@@ -28,13 +27,11 @@ int	main(int argc, char *argv[])
 	threads = malloc(sizeof(pthread_t) * data.n_philo);
 	if (!forks || !philos || !threads)
 		return (fail_aloc(forks, philos, threads), exit_error("Malloc failed"));
-	forks_initialized = 0;
-	if (init_all_mutexes(&data, forks, &forks_initialized)
-		|| init_philos(&data, philos, forks)
+	if (init_all_mutexes(&data, forks) || init_philos(&data, philos, forks)
 		|| start_threads(&data, philos, threads)
 		|| pthread_create(&monitor, NULL, monitor_routine, philos) != 0)
 	{
-		fail_mutex(&data, forks, forks_initialized);
+		fail_mutex(&data, forks);
 		fail_aloc(forks, philos, threads);
 		return (exit_error("Initialization failed"));
 	}

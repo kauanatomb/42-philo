@@ -6,17 +6,16 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:21:12 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/15 15:05:42 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/18 11:50:16 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-int init_all_mutexes(t_data *data, pthread_mutex_t *forks, int *forks_initialized)
+int	init_all_mutexes(t_data *data, pthread_mutex_t *forks)
 {
-	int i;
+	int	i;
 
-	*forks_initialized = 0;
 	if (pthread_mutex_init(&data->state_mutex, NULL) != 0)
 		return (1);
 	if (pthread_mutex_init(&data->print_mutex, NULL) != 0)
@@ -28,7 +27,6 @@ int init_all_mutexes(t_data *data, pthread_mutex_t *forks, int *forks_initialize
 			return (1);
 		i++;
 	}
-	*forks_initialized = i;
 	return (0);
 }
 
