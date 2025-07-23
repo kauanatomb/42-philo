@@ -16,11 +16,39 @@ void	print_action(t_philo *philo, const char *msg)
 {
 	long	timestamp;
 
+	if (is_simulation_stopped(philo->data))
+		return ;
+	sem_wait(philo->data->print);
 	timestamp = get_time_ms() - (long)philo->data->start_time;
-	if (!is_simulation_stopped(philo->data))
+	printf("%ld %d %s\n", timestamp, philo->id + 1, msg);
+	sem_post(philo->data->print);
+}
+
+void	wait_for_termination(t_data *data)
+{
+	int		status;
+	int		i;
+
+	waitpid(-1, &status, 0);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+		kill_all_processes(data);
+	else
 	{
-		sem_wait(philo->data->print);
-		printf("%ld %d %s\n", timestamp, philo->id + 1, msg);
-		sem_post(philo->data->print);
+		i = 0;
+		while (i < data->n_philo)
+			waitpid(data->pids[i++], NULL, 0);
 	}
+}
+
+void	kill_all_processes(t_data *data)
+{
+    int i;
+
+    i = 0;
+    while (i < data->n_philo)
+    {
+        if (data->pids[i] > 0)
+            kill(data->pids[i], SIGKILL);
+        i++;
+    }
 }

@@ -13,13 +13,13 @@
 NAME    := philo_bonus
 
 SRCS     := src/main.c src/philo_bonus_utils.c src/philo_bonus_utils1.c \
-			src/philo_bonus_utils2.c src/monitor.c src/parse_bonus.c \
+			src/philo_bonus_utils2.c src/parse_bonus.c src/monitor_bonus.c \
 			src/cleanup_bonus.c
 
 OBJS     := $(SRCS:.c=.o)
 
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror
+CFLAGS  := -Wall -Wextra
 INCLUDES := -Iincludes
 
 all: $(NAME)

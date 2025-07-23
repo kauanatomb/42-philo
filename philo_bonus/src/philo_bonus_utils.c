@@ -17,6 +17,7 @@ int	init_semaphores(t_data *data)
 	sem_unlink("/forks");
 	sem_unlink("/print");
 	sem_unlink("/death");
+	sem_unlink("/meal");
 	data->forks = sem_open("/forks", O_CREAT, 0644, data->n_philo);
 	if (data->forks == SEM_FAILED)
 		return (1);
@@ -26,20 +27,35 @@ int	init_semaphores(t_data *data)
 	data->death = sem_open("/death", O_CREAT, 0644, 1);
 	if (data->death == SEM_FAILED)
 		return (1);
+	data->meal = sem_open("/meal", O_CREAT, 0644, 1);
+	if (data->meal == SEM_FAILED)
+		return (1);
 	return (0);
 }
 
 int	init_allocs(t_data *data, t_philo **philos)
 {
+	int	i;
+
+	i = 0;
 	*philos = malloc(sizeof(t_philo) * data->n_philo);
 	data->pids = malloc(sizeof(pid_t) * data->n_philo);
 	if (!*philos || !data->pids)
-		return (1);
+	return (1);
 	data->start_time = get_time_ms();
+	data->stop_flag = 0;
+	while (i < data->n_philo)
+	{
+		(*philos)[i].id = i;
+		(*philos)[i].data = data;
+		(*philos)[i].n_meals = 0;
+		(*philos)[i].last_meal_time = data->start_time;
+		i++;
+	}
 	return (0);
 }
 
-int	start_processes(t_data *data)
+int		start_processes(t_data *data, t_philo *philos)
 {
 	int	i;
 	pid_t	pid;
@@ -52,7 +68,7 @@ int	start_processes(t_data *data)
 			return (1);
 		else if (pid == 0)
 		{
-			philosopher_routine(data, i);
+			philosopher_routine(&philos[i]);
 			exit(0);
 		}
 		data->pids[i] = pid;

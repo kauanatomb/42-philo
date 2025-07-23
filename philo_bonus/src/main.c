@@ -29,7 +29,7 @@ int	main(int argc, char *argv[])
 		cleanup_resources(&data, philos);
 		return (exit_error("Malloc failed"));
 	}
-	if (start_processes(&data) != 0)
+	if (start_processes(&data, philos) != 0)
 	{
 		kill_all_processes(&data);
 		cleanup_resources(&data, philos);

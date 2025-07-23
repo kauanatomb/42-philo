@@ -25,10 +25,10 @@ static void	eat(t_philo *philo)
 	sem_wait(philo->data->forks);
 	print_action(philo, "has taken a fork");
 
-	sem_wait(philo->data->death);
+	sem_wait(philo->data->meal);
 	philo->last_meal_time = get_time_ms();
 	philo->n_meals++;
-	sem_post(philo->data->death);
+	sem_post(philo->data->meal);
 
 	print_action(philo, "is eating");
 	safe_usleep(philo->data->time_to_eat);
@@ -48,22 +48,37 @@ static void	dream(t_philo *philo)
 	safe_usleep(philo->data->time_to_sleep);
 }
 
-void	philosopher_routine(t_data *data, int id)
+void	philosopher_routine(t_philo *philo)
 {
-	t_philo philo;
+	pthread_t monitor;
 
-	philo.id = id;
-	philo.data = data;
-	philo.last_meal_time = data->start_time;
-	philo.n_meals = 0;
-
-	if (id % 2 == 0)
+	if (pthread_create(&monitor, NULL, philo_monitor, philo) != 0)
+		exit(1);
+	pthread_detach(monitor);
+	if (philo->id % 2 == 0)
 		safe_usleep(10);
-	while (!is_simulation_stopped(data))
+	while (!is_simulation_stopped(philo->data))
 	{
-		eat(&philo);
-		dream(&philo);
-		think(&philo);
+		eat(philo);
+		dream(philo);
+		think(philo);
 	}
 	exit(0);
+}
+
+int	is_simulation_stopped(t_data *data)
+{
+	int stopped;
+
+	sem_wait(&data->death);
+	stopped = data->stop_flag;
+	sem_post(&data->death);
+	return stopped;
+}
+
+void	set_simulation_stop(t_data *data)
+{
+	sem_wait(&data->death);
+	data->stop_flag = 1;
+	sem_post(&data->death);
 }
