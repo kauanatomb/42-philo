@@ -16,8 +16,6 @@ void	print_action(t_philo *philo, const char *msg)
 {
 	long	timestamp;
 
-	if (is_simulation_stopped(philo->data))
-		return ;
 	sem_wait(philo->data->print);
 	timestamp = get_time_ms() - (long)philo->data->start_time;
 	printf("%ld %d %s\n", timestamp, philo->id + 1, msg);

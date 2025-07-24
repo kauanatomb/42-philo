@@ -43,7 +43,7 @@ int	init_allocs(t_data *data, t_philo **philos)
 	if (!*philos || !data->pids)
 	return (1);
 	data->start_time = get_time_ms();
-	data->stop_flag = 0;
+	data->done_meal_count = 0;
 	while (i < data->n_philo)
 	{
 		(*philos)[i].id = i;
@@ -61,16 +61,21 @@ int		start_processes(t_data *data, t_philo *philos)
 	pid_t	pid;
 
 	i = 0;
+	if (data->must_eat_count > 0)
+	{
+		pthread_t checker;
+		if (pthread_create(&checker, NULL, meal_checker, &data) != 0)
+			return (1);
+		if (pthread_detach(checker) != 0)
+			return (1);
+	}
 	while (i < data->n_philo)
 	{
 		pid = fork();
 		if (pid < 0)
 			return (1);
 		else if (pid == 0)
-		{
 			philosopher_routine(&philos[i]);
-			exit(0);
-		}
 		data->pids[i] = pid;
 		i++;
 	}
@@ -82,7 +87,7 @@ long	get_time_ms(void)
 	struct timeval	tv;
 
 	if (gettimeofday(&tv, NULL) == -1)
-		exit_error("gettimeofday() error");
+		exit_error("[gettimeofday ERROR]\n", 1);
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 

@@ -12,47 +12,40 @@
 
 #include "philo_bonus.h"
 
-static int	check_death(t_philo *philo)
+void	check_death(t_philo *philo)
 {
-	long	now = get_time_ms();
+	long	now;
 	long	time_since_meal;
 
-	sem_wait(philo->data->meal);
-	time_since_meal = now - philo->last_meal_time;
-	sem_post(philo->data->meal);
-
-	if (time_since_meal > philo->data->time_to_die)
+	while (1)
 	{
-		print_action(philo, "died");
-		set_simulation_stop(philo->data);
-		exit(1);
+		sem_wait(philo->data->death);
+		now = get_time_ms();
+		time_since_meal = now - philo->last_meal_time;
+		if (time_since_meal > philo->data->time_to_die)
+		{
+			print_action(philo, "died");
+			sem_wait(philo->data->print);
+			sem_post(philo->data->meal);
+			exit(0);
+		}
+		sem_post(philo->data->death);
 	}
-	return (0);
 }
 
-static int	check_meals(t_philo *philo)
+void	*meal_checker(void *arg)
 {
-	sem_wait(philo->data->meal);
-	int done = (philo->data->must_eat_count > 0 && philo->n_meals >= philo->data->must_eat_count);
-	sem_post(philo->data->meal);
+	t_data	*data = (t_data *)arg;
+	int		i = 0;
 
-	if (done)
+	while (1)
 	{
-		set_simulation_stop(philo->data);
-		return (1);
+		sem_wait(data->meal);
+		++i;
+		if (i >= data->n_philo)
+		{
+			kill_all_processes(data);
+			cleanup_resources(data, NULL, NULL, 0);
+		}
 	}
-	return (0);
-}
-
-void	*philo_monitor(void *arg)
-{
-	t_philo	*philo = (t_philo *)arg;
-
-	while (!is_simulation_stopped(philo->data))
-	{
-		safe_usleep(1);
-		if (check_death(philo) || check_meals(philo))
-			break;
-	}
-	exit(0);
 }
