@@ -18,11 +18,11 @@ int	main(int argc, char *argv[])
 	t_philo	*philos;
 
 	if (parse_args(argc, argv, &data))
-		return (exit_error("Invalid arguments."));
+		return (exit_error("Invalid arguments.", 1));
 	if (init_semaphores(&data))
 	{
 		cleanup_semaphores(&data);
-		return (exit_error("Failed to init semaphores"));
+		return (exit_error("Failed to init semaphores", 1));
 	}
     if (init_allocs(&data, &philos))
 		cleanup_resources(&data, philos, "Malloc failed", 1);

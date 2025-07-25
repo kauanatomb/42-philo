@@ -30,13 +30,12 @@ typedef struct s_data {
     int             time_to_eat;
     int             time_to_sleep;
     int             must_eat_count;
-    int             stop_flag;
     long            start_time;
     sem_t           *forks;
     sem_t           *print;
     sem_t           *death;
-    pid_t           *pids;
     sem_t           *meal;
+    pid_t           *pids;
 } t_data;
 
 typedef struct s_philo {
@@ -49,19 +48,17 @@ typedef struct s_philo {
 int		init_semaphores(t_data *data);
 int	    init_allocs(t_data *data, t_philo **philos);
 void	cleanup_semaphores(t_data *data);
-void	cleanup_resources(t_data *data, t_philo *philos);
+void	cleanup_resources(t_data *data, t_philo *philos, char *msg, int signal);
 
 int		parse_args(int argc, char **argv, t_data *data);
-int		exit_error(char *msg);
+int		exit_error(char *msg, int signal);
 long	get_time_ms(void);
 
 
 void	philosopher_routine(t_philo *philo);
 void	print_action(t_philo *philo, const char *msg);
-void	*philo_monitor(void *arg);
 int		start_processes(t_data *data, t_philo *philos);
-int		is_simulation_stopped(t_data *data);
-void	set_simulation_stop(t_data *data);
+void	*philo_monitor(void *arg);
 void	wait_for_termination(t_data *data);
 void	safe_usleep(long milliseconds);
 void	kill_all_processes(t_data *data);

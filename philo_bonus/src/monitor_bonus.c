@@ -33,7 +33,8 @@ static int	check_death(t_philo *philo)
 static int	check_meals(t_philo *philo)
 {
 	sem_wait(philo->data->meal);
-	int done = (philo->data->must_eat_count > 0 && philo->n_meals >= philo->data->must_eat_count);
+	int done = (philo->data->must_eat_count > 0
+			&& philo->n_meals >= philo->data->must_eat_count);
 	sem_post(philo->data->meal);
 
 	if (done)
@@ -48,7 +49,7 @@ void	*philo_monitor(void *arg)
 {
 	t_philo	*philo = (t_philo *)arg;
 
-	while (!is_simulation_stopped(philo->data))
+	while (1)
 	{
 		safe_usleep(1);
 		if (check_death(philo) || check_meals(philo))

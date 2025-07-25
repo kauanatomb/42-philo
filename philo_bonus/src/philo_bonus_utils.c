@@ -43,7 +43,6 @@ int	init_allocs(t_data *data, t_philo **philos)
 	if (!*philos || !data->pids)
 	return (1);
 	data->start_time = get_time_ms();
-	data->stop_flag = 0;
 	while (i < data->n_philo)
 	{
 		(*philos)[i].id = i;
