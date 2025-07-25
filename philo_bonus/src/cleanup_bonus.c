@@ -12,10 +12,11 @@
 
 #include "philo_bonus.h"
 
-int	exit_error(char *msg)
+int	exit_error(char *msg, int signl)
 {
-	fprintf(stderr, "%s\n", msg);
-	return (1);
+	if (msg)
+		fprintf(stderr, "%s\n", msg);
+	return (signal);
 }
 
 void	cleanup_semaphores(t_data *data)
@@ -42,11 +43,12 @@ void	cleanup_semaphores(t_data *data)
 	}
 }
 
-void	cleanup_resources(t_data *data, t_philo *philos)
+void	cleanup_resources(t_data *data, t_philo *philos, char *msg, int signal)
 {
 	cleanup_semaphores(data);
 	if (data->pids)
 		free(data->pids);
 	if (philos)
 		free(philos);
+	exit_error(msg, signal);
 }

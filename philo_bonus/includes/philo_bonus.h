@@ -22,6 +22,7 @@
 # include <pthread.h>
 # include <signal.h>
 # include <sys/wait.h>
+# include <fcntl.h>
 
 typedef struct s_data {
     int             n_philo;

@@ -25,17 +25,12 @@ int	main(int argc, char *argv[])
 		return (exit_error("Failed to init semaphores"));
 	}
     if (init_allocs(&data, &philos))
-	{
-		cleanup_resources(&data, philos);
-		return (exit_error("Malloc failed"));
-	}
+		cleanup_resources(&data, philos, "Malloc failed", 1);
 	if (start_processes(&data, philos) != 0)
 	{
 		kill_all_processes(&data);
-		cleanup_resources(&data, philos);
-		return (exit_error("Failed to fork"));
+		cleanup_resources(&data, philos, "Failed to fork", 1);
 	}
 	wait_for_termination(&data);
-	cleanup_resources(&data, philos);
-	return (0);
+	cleanup_resources(&data, philos, NULL, 0);
 }

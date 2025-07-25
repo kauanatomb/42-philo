@@ -70,15 +70,15 @@ int	is_simulation_stopped(t_data *data)
 {
 	int stopped;
 
-	sem_wait(&data->death);
+	sem_wait(data->death);
 	stopped = data->stop_flag;
-	sem_post(&data->death);
+	sem_post(data->death);
 	return stopped;
 }
 
 void	set_simulation_stop(t_data *data)
 {
-	sem_wait(&data->death);
+	sem_wait(data->death);
 	data->stop_flag = 1;
-	sem_post(&data->death);
+	sem_post(data->death);
 }

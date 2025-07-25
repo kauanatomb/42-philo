@@ -19,7 +19,7 @@ SRCS     := src/main.c src/philo_bonus_utils.c src/philo_bonus_utils1.c \
 OBJS     := $(SRCS:.c=.o)
 
 CC      := cc
-CFLAGS  := -Wall -Wextra
+CFLAGS  := -Wall -Wextra -Werror
 INCLUDES := -Iincludes
 
 all: $(NAME)
