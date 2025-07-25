@@ -58,7 +58,7 @@ long	get_time_ms(void);
 void	philosopher_routine(t_philo *philo);
 void	print_action(t_philo *philo, const char *msg);
 int		start_processes(t_data *data, t_philo *philos);
-void	*philo_monitor(void *arg);
+void	*ft_monitor(void *arg);
 void	wait_for_termination(t_data *data);
 void	safe_usleep(long milliseconds);
 void	kill_all_processes(t_data *data);

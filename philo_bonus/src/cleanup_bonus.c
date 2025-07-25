@@ -12,7 +12,7 @@
 
 #include "philo_bonus.h"
 
-int	exit_error(char *msg, int signl)
+int	exit_error(char *msg, int signal)
 {
 	if (msg)
 		fprintf(stderr, "%s\n", msg);
@@ -21,22 +21,22 @@ int	exit_error(char *msg, int signl)
 
 void	cleanup_semaphores(t_data *data)
 {
-	if (data->forks != SEM_FAILED && data->forks != NULL)
+	if (data->forks != SEM_FAILED)
 	{
 		sem_close(data->forks);
 		sem_unlink("/forks");
 	}
-	if (data->print != SEM_FAILED && data->print != NULL)
+	if (data->print != SEM_FAILED)
 	{
 		sem_close(data->print);
 		sem_unlink("/print");
 	}
-	if (data->death != SEM_FAILED && data->death != NULL)
+	if (data->death != SEM_FAILED)
 	{
 		sem_close(data->death);
 		sem_unlink("/death");
 	}
-	if (data->meal != SEM_FAILED && data->meal != NULL)
+	if (data->meal != SEM_FAILED)
 	{
 		sem_close(data->meal);
 		sem_unlink("/meal");

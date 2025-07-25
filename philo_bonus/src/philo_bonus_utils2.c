@@ -16,28 +16,35 @@ void	print_action(t_philo *philo, const char *msg)
 {
 	long	timestamp;
 
-	if (is_simulation_stopped(philo->data))
-		return ;
 	sem_wait(philo->data->print);
 	timestamp = get_time_ms() - (long)philo->data->start_time;
 	printf("%ld %d %s\n", timestamp, philo->id + 1, msg);
 	sem_post(philo->data->print);
 }
 
-void	wait_for_termination(t_data *data)
+void wait_for_termination(t_data *data)
 {
-	int		status;
-	int		i;
-
-	waitpid(-1, &status, 0);
-	if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
-		kill_all_processes(data);
-	else
-	{
-		i = 0;
-		while (i < data->n_philo)
-			waitpid(data->pids[i++], NULL, 0);
-	}
+    int status;
+    int completed_count = 0;
+    
+    if (data->must_eat_count > 0)
+    {
+        while (completed_count < data->n_philo)
+        {
+            sem_wait(data->meal);
+            completed_count++;
+        }
+        kill_all_processes(data);
+		return ;
+    }
+    while (waitpid(-1, &status, 0) > 0)
+    {
+        if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+        {
+            kill_all_processes(data);
+            break;
+        }
+    }
 }
 
 void	kill_all_processes(t_data *data)

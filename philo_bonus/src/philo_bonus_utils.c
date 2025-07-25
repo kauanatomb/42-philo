@@ -27,7 +27,7 @@ int	init_semaphores(t_data *data)
 	data->death = sem_open("/death", O_CREAT, 0644, 1);
 	if (data->death == SEM_FAILED)
 		return (1);
-	data->meal = sem_open("/meal", O_CREAT, 0644, 1);
+	data->meal = sem_open("/meal", O_CREAT, 0644, 0);
 	if (data->meal == SEM_FAILED)
 		return (1);
 	return (0);
