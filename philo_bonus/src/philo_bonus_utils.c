@@ -6,7 +6,7 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:21:12 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/15 15:05:42 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:42:03 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	init_allocs(t_data *data, t_philo **philos)
 	*philos = malloc(sizeof(t_philo) * data->n_philo);
 	data->pids = malloc(sizeof(pid_t) * data->n_philo);
 	if (!*philos || !data->pids)
-	return (1);
+		return (1);
 	data->start_time = get_time_ms();
 	while (i < data->n_philo)
 	{
@@ -54,9 +54,9 @@ int	init_allocs(t_data *data, t_philo **philos)
 	return (0);
 }
 
-int		start_processes(t_data *data, t_philo *philos)
+int	start_processes(t_data *data, t_philo *philos)
 {
-	int	i;
+	int		i;
 	pid_t	pid;
 
 	i = 0;

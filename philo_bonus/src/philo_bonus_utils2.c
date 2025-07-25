@@ -6,7 +6,7 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:21:12 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/15 15:05:42 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:36:09 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,40 +22,40 @@ void	print_action(t_philo *philo, const char *msg)
 	sem_post(philo->data->print);
 }
 
-void wait_for_termination(t_data *data)
+void	wait_for_termination(t_data *data)
 {
-    int status;
-    int completed_count = 0;
-    
-    if (data->must_eat_count > 0)
-    {
-        while (completed_count < data->n_philo)
-        {
-            sem_wait(data->meal);
-            completed_count++;
-        }
-        kill_all_processes(data);
+	int	status;
+	int	completed_count = 0;
+
+	if (data->must_eat_count > 0)
+	{
+		while (completed_count < data->n_philo)
+		{
+			sem_wait(data->meal);
+			completed_count++;
+		}
+		kill_all_processes(data);
 		return ;
-    }
-    while (waitpid(-1, &status, 0) > 0)
-    {
-        if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
-        {
-            kill_all_processes(data);
-            break;
-        }
-    }
+	}
+	while (waitpid(-1, &status, 0) > 0)
+	{
+		if (WIFEXITED(status) && WEXITSTATUS(status) == 1)
+		{
+			kill_all_processes(data);
+			break ;
+		}
+	}
 }
 
 void	kill_all_processes(t_data *data)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (i < data->n_philo)
-    {
-        if (data->pids[i] > 0)
-            kill(data->pids[i], SIGKILL);
-        i++;
-    }
+	i = 0;
+	while (i < data->n_philo)
+	{
+		if (data->pids[i] > 0)
+			kill(data->pids[i], SIGKILL);
+		i++;
+	}
 }
