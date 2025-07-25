@@ -31,18 +31,19 @@ static int	check_death(t_philo *philo)
 static int	check_meals(t_philo *philo)
 {
 	static int	already_signaled = 0;
-	int			current_meals;
 
 	if (philo->data->must_eat_count <= 0)
 		return (0);
 	sem_wait(philo->data->death);
-	current_meals = philo->n_meals;
-	sem_post(philo->data->death);
-	if (current_meals >= philo->data->must_eat_count && !already_signaled)
+	if (philo->n_meals >= philo->data->must_eat_count && !already_signaled)
 	{
-		while (1)
-			safe_usleep(100);
+		already_signaled = 1;
+		philo->finished = 1;
+		sem_post(philo->data->death);
+		sem_post(philo->data->meal);
+		return (1);
 	}
+	sem_post(philo->data->death);
 	return (0);
 }
 
@@ -56,7 +57,8 @@ void	*ft_monitor(void *arg)
 		safe_usleep(1);
 		if (check_death(philo))
 			return (NULL);
-		check_meals(philo);
+		if (check_meals(philo))
+			return (NULL);
 	}
 	return (NULL);
 }

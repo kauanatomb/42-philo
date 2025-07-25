@@ -25,8 +25,9 @@ void	print_action(t_philo *philo, const char *msg)
 void	wait_for_termination(t_data *data)
 {
 	int	status;
-	int	completed_count = 0;
+	int	completed_count;
 
+	completed_count = 0;
 	if (data->must_eat_count > 0)
 	{
 		while (completed_count < data->n_philo)

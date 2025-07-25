@@ -48,6 +48,7 @@ int	init_allocs(t_data *data, t_philo **philos)
 		(*philos)[i].id = i;
 		(*philos)[i].data = data;
 		(*philos)[i].n_meals = 0;
+		(*philos)[i].finished = 0;
 		(*philos)[i].last_meal_time = data->start_time;
 		i++;
 	}

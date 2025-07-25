@@ -42,8 +42,6 @@ static void	dream(t_philo *philo)
 void	philosopher_routine(t_philo *philo)
 {
 	pthread_t	monitor;
-	int			current_meals;
-	int			must_eat;
 
 	if (pthread_create(&monitor, NULL, ft_monitor, philo) != 0
 		|| pthread_detach(monitor) != 0)
@@ -52,11 +50,7 @@ void	philosopher_routine(t_philo *philo)
 		safe_usleep(10);
 	while (1)
 	{
-		sem_wait(philo->data->death);
-		current_meals = philo->n_meals;
-		must_eat = philo->data->must_eat_count;
-		sem_post(philo->data->death);
-		if (must_eat > 0 && current_meals >= must_eat)
+		if (philo->finished)
 		{
 			safe_usleep(100);
 			continue ;

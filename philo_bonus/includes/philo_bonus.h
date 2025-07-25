@@ -6,7 +6,7 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 10:07:23 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/25 16:48:47 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/25 17:28:28 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ typedef struct s_data {
 typedef struct s_philo {
 	int		id;
 	int		n_meals;
+	int		finished;
 	long	last_meal_time;
 	t_data	*data;
 }	t_philo;
