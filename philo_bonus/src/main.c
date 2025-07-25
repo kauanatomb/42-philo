@@ -29,7 +29,7 @@ int	main(int argc, char *argv[])
 	if (start_processes(&data, philos) != 0)
 	{
 		kill_all_processes(&data);
-		cleanup_resources(&data, philos, "Failed to fork", 1);
+		cleanup_resources(&data, philos, "Failed to start processes", 1);
 	}
 	wait_for_termination(&data);
 	cleanup_resources(&data, philos, NULL, 0);

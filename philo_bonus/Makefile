@@ -12,8 +12,8 @@
 
 NAME    := philo_bonus
 
-SRCS     := src/main.c src/philo_bonus_utils.c src/philo_bonus_utils1.c \
-			src/philo_bonus_utils2.c src/parse_bonus.c src/monitor_bonus.c \
+SRCS     := src/main.c src/philo_bonus_utils.c src/philo_routine_bonus.c \
+			src/init_bonus.c src/parse_bonus.c src/monitor_bonus.c \
 			src/cleanup_bonus.c
 
 OBJS     := $(SRCS:.c=.o)
