@@ -33,4 +33,5 @@ int	main(int argc, char *argv[])
 	}
 	wait_for_termination(&data);
 	cleanup_resources(&data, philos, NULL, 0);
+	return (0);
 }

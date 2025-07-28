@@ -50,6 +50,7 @@ int		init_semaphores(t_data *data);
 int		init_allocs(t_data *data, t_philo **philos);
 void	cleanup_semaphores(t_data *data);
 void	cleanup_resources(t_data *data, t_philo *philos, char *msg, int signal);
+void	cleanup_child_process(t_data *data, t_philo *philos);
 
 int		parse_args(int argc, char **argv, t_data *data);
 int		exit_error(char *msg, int signal);

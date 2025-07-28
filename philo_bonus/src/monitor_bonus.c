@@ -22,6 +22,7 @@ static int	check_death(t_philo *philo)
 	{
 		print_action(philo, "died");
 		sem_post(philo->data->death);
+		cleanup_child_process(philo->data, philo);
 		exit(1);
 	}
 	sem_post(philo->data->death);

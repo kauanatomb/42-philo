@@ -52,3 +52,11 @@ void	cleanup_resources(t_data *data, t_philo *philos, char *msg, int signal)
 		free(philos);
 	exit_error(msg, signal);
 }
+
+void	cleanup_child_process(t_data *data, t_philo *philos)
+{
+	if (data->pids)
+		free(data->pids);
+	if (philos)
+		free(philos);
+}
