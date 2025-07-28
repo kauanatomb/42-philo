@@ -6,7 +6,7 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/09 10:21:12 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/15 15:05:42 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/28 11:54:01 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,23 @@ void	safe_usleep(long milliseconds)
 		usleep(250);
 }
 
+static int	should_stop_eating(t_philo *philo)
+{
+	pthread_mutex_lock(&philo->meal_mutex);
+	if (philo->data->must_eat_count > 0
+		&& philo->n_meals >= philo->data->must_eat_count)
+	{
+		pthread_mutex_unlock(&philo->meal_mutex);
+		return (1);
+	}
+	pthread_mutex_unlock(&philo->meal_mutex);
+	return (0);
+}
+
 static void	eat(t_philo *philo)
 {
+	if (should_stop_eating(philo))
+		return ;
 	pthread_mutex_lock(philo->r_fork);
 	print_action(philo, "has taken a fork");
 	if (philo->data->n_philo == 1)
@@ -43,17 +58,6 @@ static void	eat(t_philo *philo)
 	pthread_mutex_unlock(philo->l_fork);
 }
 
-static void	think(t_philo *philo)
-{
-	print_action(philo, "is thinking");
-}
-
-static void	dream(t_philo *philo)
-{
-	print_action(philo, "is sleeping");
-	safe_usleep(philo->data->time_to_sleep);
-}
-
 void	*philosopher_routine(void *arg)
 {
 	t_philo	*philo;
@@ -64,8 +68,9 @@ void	*philosopher_routine(void *arg)
 	while (!is_simulation_stopped(philo->data))
 	{
 		eat(philo);
-		dream(philo);
-		think(philo);
+		print_action(philo, "is sleeping");
+		safe_usleep(philo->data->time_to_sleep);
+		print_action(philo, "is thinking");
 	}
 	return (NULL);
 }
