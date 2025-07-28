@@ -1,0 +1,48 @@
+{
+   glibc_sem_open_tsearch
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:tsearch
+   fun:__sem_check_add_mapping
+   fun:sem_open*
+}
+
+{
+   glibc_sem_open_mapping
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:malloc
+   fun:__sem_check_add_mapping
+   fun:sem_open*
+}
+
+{
+   pthread_create_tls
+   Memcheck:Leak
+   match-leak-kinds: possible
+   fun:calloc
+   ...
+   fun:_dl_allocate_tls
+   fun:allocate_stack
+   fun:pthread_create*
+}
+
+{
+   glibc_tsearch_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:tsearch
+   fun:__sem_check_add_mapping
+   fun:sem_open*
+}
+
+{
+   glibc_sem_mapping_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   fun:malloc
+   fun:__sem_check_add_mapping
+   fun:sem_open*
+}
