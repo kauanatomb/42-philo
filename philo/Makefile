@@ -18,7 +18,7 @@ SRCS     := src/main.c src/philo_utils.c src/philo_utils1.c src/philo_utils2.c \
 OBJS     := $(SRCS:.c=.o)
 
 CC      := cc
-CFLAGS  := -Wall -Wextra -Werror
+CFLAGS  := -Wall -Wextra -Werror -fsanitize=thread
 INCLUDES := -Iincludes
 
 all: $(NAME)
