@@ -29,7 +29,7 @@ static int	check_death(t_philo *philo)
 	return (0);
 }
 
-static int	meal_checker(t_philo *philo)
+static int	check_meals(t_philo *philo)
 {
 	static int	already_signaled = 0;
 
