@@ -6,7 +6,7 @@
 /*   By: ktombola <ktombola@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 10:21:12 by ktombola          #+#    #+#             */
-/*   Updated: 2025/07/15 15:12:52 by ktombola         ###   ########.fr       */
+/*   Updated: 2025/07/25 16:25:03 by ktombola         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ int	main(int argc, char *argv[])
 		return (exit_error("Failed to init semaphores", 1));
 	}
 	if (init_allocs(&data, &philos))
-		cleanup_resources(&data, philos, "Failed to allocate resources", 1);
+		cleanup_resources(&data, philos, "Malloc failed", 1);
 	if (start_processes(&data, philos) != 0)
 	{
 		kill_all_processes(&data);
-		cleanup_resources(&data, philos, "Failed to fork", 1);
+		cleanup_resources(&data, philos, "Failed to start processes", 1);
 	}
 	wait_for_termination(&data);
 	cleanup_resources(&data, philos, NULL, 0);
