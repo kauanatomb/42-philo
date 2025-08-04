@@ -28,7 +28,7 @@ void	fail_aloc(pthread_mutex_t *forks, t_philo *philos, pthread_t *threads)
 		free(threads);
 }
 
-void	fail_mutex(t_data *data, pthread_mutex_t *forks)
+void	fail_mutex(t_data *data, pthread_mutex_t *forks, t_philo *philos)
 {
 	int	i;
 
@@ -36,7 +36,10 @@ void	fail_mutex(t_data *data, pthread_mutex_t *forks)
 	{
 		i = -1;
 		while (++i < data->n_philo)
+		{
 			pthread_mutex_destroy(&forks[i]);
+			pthread_mutex_destroy(&philos[i].meal_mutex);
+		}
 	}
 	pthread_mutex_destroy(&data->state_mutex);
 	pthread_mutex_destroy(&data->print_mutex);

@@ -31,7 +31,7 @@ int	main(int argc, char *argv[])
 		|| start_threads(&data, philos, threads)
 		|| pthread_create(&monitor, NULL, monitor_routine, philos) != 0)
 	{
-		fail_mutex(&data, forks);
+		fail_mutex(&data, forks, philos);
 		fail_aloc(forks, philos, threads);
 		return (exit_error("Initialization failed"));
 	}

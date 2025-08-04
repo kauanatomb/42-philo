@@ -60,7 +60,7 @@ void	*monitor_routine(void *arg);
 int		is_simulation_stopped(t_data *data);
 void	set_simulation_stop(t_data *data);
 void	safe_usleep(long milliseconds);
-void	fail_mutex(t_data *data, pthread_mutex_t *forks);
+void	fail_mutex(t_data *data, pthread_mutex_t *forks, t_philo *philos);
 void	fail_aloc(pthread_mutex_t *forks, t_philo *philos, pthread_t *threads);
 
 #endif
